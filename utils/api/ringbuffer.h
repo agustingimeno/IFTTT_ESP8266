@@ -15,6 +15,6 @@
 #define MAX_DATOS	1024*5
 
 int16_t write_uart(const void * datos , uint16_t cant );
-
+void read_uart(char* datos);
 
 #endif /* API_RINGBUFFER_H_ */

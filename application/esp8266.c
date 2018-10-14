@@ -69,10 +69,10 @@ static int multiplier = 0;
 *** PRIVATE FUNCTION PROTOTYPES
 ********************************************************************************************************/
 void clear_payload(void);
-void clear_timeout();
-bool_t timeoutWaitingOnWifiConnect();
+void clear_timeout(void);
+bool_t timeoutWaitingOnWifiConnect(void);
 bool_t timeout(int timeout);
-bool_t recv(const char *cmp);
+bool_t check_response(const char *cmp);
 void clear_recv(void);
 
 /********************************************************************************************************
@@ -122,7 +122,7 @@ void ESP_SM_Wifi(void){
 				esp_state = WIFI_DISCONNECTED;
 				clear_recv();
 				clear_timeout();
-			}else if(recv("OK")){
+			}else if(check_response("OK")){
 				esp_state = WIFI_CONNECTED;
 				clear_recv();
 				clear_timeout();
@@ -143,7 +143,7 @@ void ESP_SM_TCP(void){
 				esp_state = WIFI_CONNECTED;
 				clear_recv();
 				clear_timeout();
-			}else if(recv("OK")){
+			}else if(check_response("OK")){
 				esp_state = TCP_CONNECTED;
 				clear_recv();
 				clear_timeout();
@@ -157,7 +157,7 @@ void ESP_SM_TCP(void){
 				esp_state = WIFI_CONNECTED;
 				clear_recv();
 				clear_timeout();
-			}else if(recv("OK")){
+			}else if(check_response("OK")){
 				esp_state = TCP_SENDING_DATA;
 				clear_recv();
 				clear_timeout();
@@ -169,7 +169,7 @@ void ESP_SM_TCP(void){
 				esp_state = TCP_CONNECTED;
 				clear_recv();
 				clear_timeout();
-			}else if(recv("SEND OK")){
+			}else if(check_response("SEND OK")){
 				esp_state = TCP_CONNECTED;
 				clear_recv();
 				clear_timeout();
@@ -202,17 +202,8 @@ bool_t timeout(int timeout){
 	}
 }
 
-bool_t recv(const char *cmp){
-	int error = 0;
-	char dato[2]= {0x00, 0x00};
-	do{
-		error = UART1_PopRX(&dato);
-		if( error != -1){
-			strcat(recv_data, &dato);
-		}
-	} while (error != -1);
-
-	printf("RX:%s",recv_data);
+bool_t check_response(const char *cmp) {
+	read_uart(recv_data);
 	if(strstr(recv_data, cmp)){
 		return TRUE;
 	}else
@@ -221,7 +212,7 @@ bool_t recv(const char *cmp){
 	}
 }
 
-void clear_recv(){
+void clear_recv(void){
 	memset(recv_data, 0x00, 1024);
 }
 
