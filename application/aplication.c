@@ -28,7 +28,6 @@ int main(void)
 	int flag = 0;
 	BoardInit();
 
-	printf("ESP8266 IFTTT R2051\n");
 	ESP_WifiConnect();
 	while (1)
 	{
@@ -37,7 +36,6 @@ int main(void)
 			IFTTT_write(LOG_TEMPERATURE, 10, 100, 1000);
 		}
 		if(TIMER_Get_Event(TIMER_USER_DEF3)){
-			//Feed the State Machines.
 			ESP_SM_Wifi();
 			ESP_SM_TCP();
 		}

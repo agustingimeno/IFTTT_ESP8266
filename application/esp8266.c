@@ -109,8 +109,6 @@ bool_t ESP_Wifi_IsConnected(void){
 	return (esp_state >= WIFI_CONNECTED);
 }
 
-
-//Feed every 500ms
 void ESP_SM_Wifi(void){
 	switch(esp_state)
 	{
@@ -118,7 +116,6 @@ void ESP_SM_Wifi(void){
 			break;
 		case WIFI_WAIT_CONNECTED:
 			if (timeout(WAIT_WIFI_TO_CONNECT_MSEC)){
-				//Failed
 				esp_state = WIFI_DISCONNECTED;
 				clear_recv();
 				clear_timeout();
@@ -139,7 +136,6 @@ void ESP_SM_TCP(void){
 	{
 		case TCP_WAIT_CONNECTED:
 			if (timeout(WAIT_TCP_TO_CONNECT_MSEC)){
-				//Failed
 				esp_state = WIFI_CONNECTED;
 				clear_recv();
 				clear_timeout();
@@ -177,6 +173,10 @@ void ESP_SM_TCP(void){
 			break;
 	}
 }
+
+/********************************************************************************************************
+*** INTERNAL MODULE FUNCTIONS
+********************************************************************************************************/
 
 bool_t timeoutWaitingOnWifiConnect(){
 	static int multiplier = 0;
@@ -219,10 +219,6 @@ void clear_recv(void){
 void clear_payload(){
 	memset(payload, 0x00, 1024);
 }
-
-/********************************************************************************************************
-*** INTERNAL MODULE FUNCTIONS
-********************************************************************************************************/
 
 /*-----------------------------------------------------------------------------------------------------*/
 
