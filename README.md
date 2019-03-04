@@ -40,7 +40,7 @@ In the file `esp8266_cfg.h` this configurations should be made:
 
 ### IFTTT Settings
 In the file `ifttt_cfg.h` this configurations should be made:  
--IFTTT_SECRET_KEY
+-IFTTT_SECRET_KEY  
 To obtain that secret key you should visit your webhook ifttt settings page. 
 
 Also, in this file is configured (using X-MACRO) the event names for the different webhooks programmed in the IFTTT platform.
