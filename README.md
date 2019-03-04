@@ -12,9 +12,13 @@ The intention of all this is just  educational, so use it at your own risk.
 ## Main Architecture
 
 The flow of the data is as follows:
-![Alt text](/docs/images/Flow.jpg?raw=true "Flow")
-The aplication is layered as follows:
-![Alt text](/docs/images/SWLayers.jpg?raw=true "Flow")
+  
+![Alt text](/docs/images/Flow.jpg?raw=true "Flow")  
+
+The aplication is layered as follows:  
+  
+![Alt text](/docs/images/SWLayers.jpg?raw=true "Flow")  
+  
 
 Explanation
 
