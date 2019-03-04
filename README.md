@@ -19,11 +19,31 @@ The aplication is layered as follows:
   
 ![Alt text](/docs/images/SWLayers.jpg?raw=true "Flow")  
   
+The project is separated in two different State Machines, one that handles all the network layer (Wifi connection) and the other one that handles all the protocol layer (TCP/IP connection). The State Machines are agnostic between each other and are also agnostic of the platform where they run.
+Both state machines write and read to ring buffers. Those ring buffers are then connected to the UART Driver. 
 
-Explanation
+The Wifi connection is triggered by the function ESP_WifiConnect. Once that function is call, the WIFI_SSID and WIFI_PASSWORD are read from the esp8266_cfg.h file. From there, the connection will be handled using AT commands by the Network layer State Machine.
+
+Once the wifi connection is settled, the TCP/IP connection can be made. In order to do that the ESP_TCPSend function should be called with the host, port and payload to be send. From there, the connection and the write to the tcp socket will be handled by the TCP state machine.
+
+Since we want to write to IFTTT, there is an extra layer of abstraction the IFTTT lib which creates the right payload to actually then call ESP_TCPSend. The IFTTT will be in charge of creating the POST HTTTP Request that will be the payload in the TCP layer. 
+
+Since both state machines are agnostic of the platform they should be called periodically. The rate at which they are called can be condifured changing the BASE_TIME in the esp8266_cfg.h. Timming is not critical. Don't call the State Machine while running inside the ISR!!!
 
 ## How to configure the current project.
 
 ### Wifi Setings
+
+In the file `esp8266_cfg.h` this configurations should be made:
+- WIFI_SSSID
+- WIFI_PASSWORD
+
 ### IFTTT Settings
+In the file `ifttt_cfg.h` this configurations should be made:
+-IFTTT_SECRET_KEY
+To obtain that secret key you should visit your webhook ifttt settings page. 
+
+Also, in this file is configured (using X-MACRO) the event names for the different webhooks programmed in the IFTTT platform.
+The first column of the x-macro table is the ID (for the enum) for the event, the second column is the name used in the IFTTT webhook.
+
 ### Other important Settings.
